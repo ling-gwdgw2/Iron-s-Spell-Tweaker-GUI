@@ -237,8 +237,8 @@ public class SpellTweakerScreen extends Screen {
         }).bounds(this.width - 96, bottomY, 80, 20).build());
 
         // Initialize Modal Buttons (managed explicitly to avoid tab/click bleed-through)
-        int modalW = 340;
-        int modalH = 130;
+        int modalW = 360;
+        int modalH = 140;
         int mX = (this.width - modalW) / 2;
         int mY = (this.height - modalH) / 2;
         int btnW = 110;
@@ -551,8 +551,8 @@ public class SpellTweakerScreen extends Screen {
 
     private void updateWidgetStates() {
         boolean hasSpell = selectedSpell != null;
-        boolean showTweaks = !batchMode;
-        boolean showBatch = batchMode;
+        boolean showTweaks = !batchMode && !showConfirmModal;
+        boolean showBatch = batchMode && !showConfirmModal;
 
         // Normal tweak widgets visibility
         if (powerSlider != null) { powerSlider.visible = showTweaks; powerSlider.active = hasSpell; }
@@ -645,7 +645,9 @@ public class SpellTweakerScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        int effectiveMouseX = showConfirmModal ? -999 : mouseX;
+        int effectiveMouseY = showConfirmModal ? -999 : mouseY;
+        super.render(guiGraphics, effectiveMouseX, effectiveMouseY, partialTick);
 
         // Header Screen Title
         guiGraphics.drawString(this.font, this.title, 16, 6, 0xFFFFFF, true);
@@ -805,22 +807,28 @@ public class SpellTweakerScreen extends Screen {
 
         // Confirmation Modal Dialog (rendered on top of everything including toasts)
         if (showConfirmModal) {
+            // Flush all previous rendering (including background widget text) so it is behind the modal
+            guiGraphics.flush();
+
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().translate(0, 0, 400.0f);
+
             // 1. Darken full screen scrim
             guiGraphics.fill(0, 0, this.width, this.height, 0xCC000000);
 
             // 2. Modal Box dimensions
-            int modalW = 340;
-            int modalH = 130;
+            int modalW = 360;
+            int modalH = 140;
             int mX = (this.width - modalW) / 2;
             int mY = (this.height - modalH) / 2;
 
-            // Modal Background (Solid dark panel with layered borders)
-            guiGraphics.fill(mX, mY, mX + modalW, mY + modalH, 0xF0141418);
-            guiGraphics.renderOutline(mX, mY, modalW, modalH, 0xFF555566);
+            // Modal Background (100% Solid dark panel with layered borders)
+            guiGraphics.fill(mX, mY, mX + modalW, mY + modalH, 0xFF121216);
+            guiGraphics.renderOutline(mX, mY, modalW, modalH, 0xFF666677);
             guiGraphics.renderOutline(mX + 1, mY + 1, modalW - 2, modalH - 2, 0xFF222228);
 
             // Top accent bar
-            guiGraphics.fill(mX + 2, mY + 2, mX + modalW - 2, mY + 4, modalAccentColor);
+            guiGraphics.fill(mX + 2, mY + 2, mX + modalW - 2, mY + 5, modalAccentColor);
 
             // Modal Title (centered)
             guiGraphics.drawCenteredString(this.font, this.modalTitle, mX + modalW / 2, mY + 14, 0xFFFFFF);
@@ -831,28 +839,32 @@ public class SpellTweakerScreen extends Screen {
             // Message text (word wrapped)
             List<FormattedCharSequence> msgLines = this.font.split(this.modalMessage, modalW - 32);
             int textY = mY + 36;
-            for (int i = 0; i < Math.min(2, msgLines.size()); i++) {
+            for (int i = 0; i < Math.min(3, msgLines.size()); i++) {
                 int lineW = this.font.width(msgLines.get(i));
-                guiGraphics.drawString(this.font, msgLines.get(i), mX + (modalW - lineW) / 2, textY + (i * 11), 0xEEEEEE, false);
+                guiGraphics.drawString(this.font, msgLines.get(i), mX + (modalW - lineW) / 2, textY + (i * 12), 0xEEEEEE, false);
             }
 
             // Sub-message text (warning / guidance, word wrapped)
             if (!this.modalSubMessage.getString().isEmpty()) {
                 List<FormattedCharSequence> subLines = this.font.split(this.modalSubMessage, modalW - 32);
-                int subY = textY + (Math.min(2, msgLines.size()) * 11) + 4;
+                int subY = textY + (Math.min(3, msgLines.size()) * 12) + 6;
                 for (int i = 0; i < Math.min(2, subLines.size()); i++) {
                     int lineW = this.font.width(subLines.get(i));
-                    guiGraphics.drawString(this.font, subLines.get(i), mX + (modalW - lineW) / 2, subY + (i * 10), 0xAAAAAA, false);
+                    guiGraphics.drawString(this.font, subLines.get(i), mX + (modalW - lineW) / 2, subY + (i * 11), 0xAAAAAA, false);
                 }
             }
 
-            // Render Modal Buttons
+            // Render Modal Buttons with active mouse coordinates
             if (modalConfirmBtn != null) {
                 modalConfirmBtn.render(guiGraphics, mouseX, mouseY, partialTick);
             }
             if (modalCancelBtn != null) {
                 modalCancelBtn.render(guiGraphics, mouseX, mouseY, partialTick);
             }
+
+            // Flush modal rendering and pop pose
+            guiGraphics.flush();
+            guiGraphics.pose().popPose();
         }
     }
 
@@ -875,9 +887,10 @@ public class SpellTweakerScreen extends Screen {
         this.modalAccentColor = accentColor;
         this.onConfirmAction = onConfirm;
         this.showConfirmModal = true;
+        updateWidgetStates();
 
-        int modalW = 340;
-        int modalH = 130;
+        int modalW = 360;
+        int modalH = 140;
         int mX = (this.width - modalW) / 2;
         int mY = (this.height - modalH) / 2;
         int btnW = 110;
@@ -909,6 +922,7 @@ public class SpellTweakerScreen extends Screen {
             this.modalCancelBtn.visible = false;
             this.modalCancelBtn.active = false;
         }
+        updateWidgetStates();
     }
 
     private void executeModalConfirm() {
