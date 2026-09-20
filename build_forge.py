@@ -3,6 +3,7 @@ import sys
 import subprocess
 import shutil
 import zipfile
+import glob
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -67,8 +68,8 @@ def build_forge():
                     dst = os.path.join(target_root, f)
                     shutil.copy2(src, dst)
 
-    # 3. Create JAR archive
-    print(f"[Forge 1.20.1] Building JAR: {out_jar}")
+    # 3. Create initial JAR archive
+    print(f"[Forge 1.20.1] Packaging initial JAR: {out_jar}")
     cmd_jar = [jar_path, '--create', '--file', out_jar, '-C', bin_dir, '.']
     res_jar = subprocess.run(cmd_jar, capture_output=True, text=True)
     if res_jar.returncode != 0:
@@ -76,7 +77,56 @@ def build_forge():
         print(res_jar.stderr)
         return False
 
-    print(f"[Forge 1.20.1] SUCCESS! Created: {out_jar} ({os.path.getsize(out_jar)} bytes)")
+    # 4. Remap bytecode from Mojang (named) mappings to SRG for Forge 1.20.1 runtime
+    user_home = os.path.expanduser("~")
+    gradle_cache = os.path.join(user_home, ".gradle", "caches")
+    mappings_pattern = os.path.join(gradle_cache, "fabric-loom", "1.20.1", "*", "mappings-srg.tiny")
+    mappings_matches = glob.glob(mappings_pattern)
+    mappings_file = mappings_matches[0] if mappings_matches else ""
+
+    tiny_pattern = os.path.join(gradle_cache, "modules-2", "files-2.1", "net.fabricmc", "tiny-remapper", "*", "*", "*.jar")
+    tiny_matches = [p for p in glob.glob(tiny_pattern) if not p.endswith("-sources.jar")]
+    mapping_io_pattern = os.path.join(gradle_cache, "modules-2", "files-2.1", "net.fabricmc", "mapping-io", "*", "*", "*.jar")
+    mapping_io_matches = [p for p in glob.glob(mapping_io_pattern) if not p.endswith("-sources.jar")]
+    asm_pattern = os.path.join(gradle_cache, "modules-2", "files-2.1", "org.ow2.asm", "*", "9.*", "*", "*.jar")
+    asm_matches = [p for p in glob.glob(asm_pattern) if not p.endswith("-sources.jar") and not p.endswith("-javadoc.jar")]
+    loom_forge_pattern = os.path.join(gradle_cache, "fabric-loom", "minecraftMaven", "net", "minecraft", "forge-1.20.1-47.4.20-minecraft-merged", "*", "*.jar")
+    loom_forge_matches = glob.glob(loom_forge_pattern)
+    loom_forge_jar = loom_forge_matches[0] if loom_forge_matches else ""
+
+    if mappings_file and tiny_matches and mapping_io_matches and loom_forge_jar:
+        print("Remapping bytecode from Mojang mappings to SRG mappings for Forge 1.20.1...")
+        unmapped_jar = os.path.join(out_dir, "unmapped.jar")
+        if os.path.exists(unmapped_jar):
+            os.remove(unmapped_jar)
+        shutil.move(out_jar, unmapped_jar)
+
+        remapper_cp = [tiny_matches[0], mapping_io_matches[0]] + asm_matches
+        remap_cmd = [
+            "java",
+            "-cp", ";".join(remapper_cp),
+            "net.fabricmc.tinyremapper.Main",
+            unmapped_jar,
+            out_jar,
+            mappings_file,
+            "named",
+            "srg",
+            loom_forge_jar,
+            os.path.join(base_dir, 'libs_forge', 'irons_spellbooks-1.20.1-3.16.2.jar')
+        ]
+        remap_res = subprocess.run(remap_cmd, capture_output=True, text=True)
+        if remap_res.returncode != 0:
+            print("Remap failed, falling back to unmapped jar:")
+            print(remap_res.stderr)
+            shutil.copyfile(unmapped_jar, out_jar)
+        else:
+            print(f"[Forge 1.20.1] Remap to SRG SUCCESSFUL! Created: {out_jar} ({os.path.getsize(out_jar)} bytes)")
+            if os.path.exists(unmapped_jar):
+                os.remove(unmapped_jar)
+    else:
+        print("Warning: Tiny-remapper or SRG mappings not found; using unmapped JAR.")
+
+    print(f"\n[Forge 1.20.1] SUCCESS! Created: {out_jar} ({os.path.getsize(out_jar)} bytes)")
     return True
 
 if __name__ == '__main__':
