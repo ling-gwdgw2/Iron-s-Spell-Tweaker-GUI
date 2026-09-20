@@ -2,9 +2,11 @@
 
 [![Minecraft 1.21.1](https://img.shields.io/badge/Minecraft-1.21.1-brightgreen.svg)](https://minecraft.net/)
 [![NeoForge](https://img.shields.io/badge/ModLoader-NeoForge%2021.1.234+-orange.svg)](https://neoforged.net/)
+[![Fabric](https://img.shields.io/badge/ModLoader-Fabric%200.16+-blue.svg)](https://fabricmc.net/)
+[![Forge 1.20.1](https://img.shields.io/badge/Forge-1.20.1%20Branch-red.svg)](https://github.com/ling-gwdgw2/Iron-s-Spell-Tweaker-GUI/tree/1.20.1-forge)
 [![Java 21](https://img.shields.io/badge/Java-21-blue.svg)](https://adoptium.net/)
 
-An intuitive, modern in-game GUI mod for **Minecraft NeoForge 1.21.1** that allows players and modpack creators to freely tweak, balance, and customize all spells from [Iron's Spells 'n Spellbooks](https://www.curseforge.com/minecraft/mc-mods/irons-spells-n-spellbooks) and its addons—directly from the title screen or in-game pause menu with **zero restart required**!
+An intuitive, modern in-game GUI mod for **Minecraft 1.21.1 (NeoForge & Fabric)** and **1.20.1 (Forge)** that allows players and modpack creators to freely tweak, balance, and customize all spells from [Iron's Spells 'n Spellbooks](https://www.curseforge.com/minecraft/mc-mods/irons-spells-n-spellbooks) and its addons—directly from the title screen or in-game pause menu with **zero restart required**!
 
 ---
 
@@ -88,21 +90,25 @@ An intuitive, modern in-game GUI mod for **Minecraft NeoForge 1.21.1** that allo
 git clone https://github.com/ling-gwdgw2/Iron-s-Spell-Tweaker-GUI.git
 cd Iron-s-Spell-Tweaker-GUI
 
-# 2. Build all loaders or a specific loader
-# Build NeoForge module:
+# 2. Build for NeoForge 1.21.1
 .\gradlew.bat :neoforge:jar
+
+# 3. Build for Fabric 1.21.1
+.\gradlew.bat :fabric:remapJar
 
 # Or build all subprojects:
 .\gradlew.bat build
 ```
 
-The compiled mod JAR will be located in `neoforge/build/libs/Iron's Spell Tweaker GUI-NeoForge-1.21.1-1.0.0.jar`.
+Compiled mod JARs will be located in:
+- `neoforge/build/libs/Iron's Spell Tweaker GUI-NeoForge-1.21.1-1.0.0.jar`
+- `fabric/build/libs/Iron's Spell Tweaker GUI-Fabric-1.21.1-1.0.0.jar`
 
 ---
 
 ## 🏗️ Multi-Loader Architecture
 
-Following the modern design of Iron's Spells 'n Spellbooks and JEI:
+Following the modern architecture pattern of Iron's Spells 'n Spellbooks:
 ```
 Iron's Spell Tweaker GUI/
 ├── common/                  # 95% of codebase (Vanilla Minecraft + Iron's Spells API)
@@ -111,6 +117,9 @@ Iron's Spell Tweaker GUI/
 ├── neoforge/                # NeoForge 1.21.1 adapter & entrypoints
 │   ├── src/main/java/       # @Mod, IConfigScreenFactory, NeoForgePlatformHelper
 │   └── src/main/resources/  # META-INF/neoforge.mods.toml, ServiceLoader SPI
+├── fabric/                  # Fabric 1.21.1 adapter & entrypoints
+│   ├── src/main/java/       # ClientModInitializer, ModMenuApi, FabricPlatformHelper
+│   └── src/main/resources/  # fabric.mod.json, ServiceLoader SPI
 └── settings.gradle          # Multi-project Gradle configuration
 ```
 
