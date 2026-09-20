@@ -1,39 +1,39 @@
 modLoader="javafml"
-loaderVersion="${loader_version_range}"
-license="${mod_license}"
+loaderVersion="[1,)"
+license="MIT"
 
 [[mods]]
-modId="${mod_id}"
-version="${mod_version}"
-displayName="${mod_name}"
+modId="iron_spell_tweaker"
+version="1.0.0"
+displayName="Iron's Spell Tweaker GUI"
 logoFile="icon.png"
-authors="${mod_authors}"
+authors="vivo9"
 description='''
-${mod_description}
+An intuitive GUI to tweak Iron's Spells 'n Spellbooks stats, cooldowns, mana costs, and rarities directly before starting the game.
 '''
 
-[[dependencies.${mod_id}]]
+[[dependencies.iron_spell_tweaker]]
     modId="neoforge"
     type="required"
-    versionRange="[${neo_version},)"
+    versionRange="[21.1.0,)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.iron_spell_tweaker]]
     modId="minecraft"
     type="required"
-    versionRange="${minecraft_version_range}"
+    versionRange="[1.21.1]"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.iron_spell_tweaker]]
     modId="irons_spellbooks"
     type="required"
     versionRange="[1.21.1,)"
     ordering="AFTER"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.iron_spell_tweaker]]
     modId="yet_another_config_lib_v3"
     type="optional"
     versionRange="[3.0.0,)"
