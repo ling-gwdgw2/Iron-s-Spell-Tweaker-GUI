@@ -13,3 +13,6 @@ plugins {
 }
 
 rootProject.name = 'IronSpellTweaker'
+
+include 'common'
+include 'neoforge'

@@ -2,7 +2,6 @@
 
 [![Minecraft 1.21.1](https://img.shields.io/badge/Minecraft-1.21.1-brightgreen.svg)](https://minecraft.net/)
 [![NeoForge](https://img.shields.io/badge/ModLoader-NeoForge%2021.1.234+-orange.svg)](https://neoforged.net/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Java 21](https://img.shields.io/badge/Java-21-blue.svg)](https://adoptium.net/)
 
 An intuitive, modern in-game GUI mod for **Minecraft NeoForge 1.21.1** that allows players and modpack creators to freely tweak, balance, and customize all spells from [Iron's Spells 'n Spellbooks](https://www.curseforge.com/minecraft/mc-mods/irons-spells-n-spellbooks) and its addons—directly from the title screen or in-game pause menu with **zero restart required**!
@@ -89,15 +88,31 @@ An intuitive, modern in-game GUI mod for **Minecraft NeoForge 1.21.1** that allo
 git clone https://github.com/ling-gwdgw2/Iron-s-Spell-Tweaker-GUI.git
 cd Iron-s-Spell-Tweaker-GUI
 
-# 2. Build the mod jar using Gradle
-# On Windows:
-.\gradlew.bat jar
+# 2. Build all loaders or a specific loader
+# Build NeoForge module:
+.\gradlew.bat :neoforge:jar
 
-# On Linux / macOS:
-./gradlew jar
+# Or build all subprojects:
+.\gradlew.bat build
 ```
 
-The compiled mod JAR will be located in `build/libs/Iron's Spell Tweaker GUI-1.21.1-1.0.0.jar`.
+The compiled mod JAR will be located in `neoforge/build/libs/Iron's Spell Tweaker GUI-NeoForge-1.21.1-1.0.0.jar`.
+
+---
+
+## 🏗️ Multi-Loader Architecture
+
+Following the modern design of Iron's Spells 'n Spellbooks and JEI:
+```
+Iron's Spell Tweaker GUI/
+├── common/                  # 95% of codebase (Vanilla Minecraft + Iron's Spells API)
+│   ├── src/main/java/       # UI Screens, Sliders, JSON I/O, Discovery Service
+│   └── src/main/resources/  # Assets (lang/en_us.json, lang/th_th.json, icon.png)
+├── neoforge/                # NeoForge 1.21.1 adapter & entrypoints
+│   ├── src/main/java/       # @Mod, IConfigScreenFactory, NeoForgePlatformHelper
+│   └── src/main/resources/  # META-INF/neoforge.mods.toml, ServiceLoader SPI
+└── settings.gradle          # Multi-project Gradle configuration
+```
 
 ---
 

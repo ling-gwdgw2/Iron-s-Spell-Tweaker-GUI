@@ -4,7 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.codex.ironspelltweaker.IronSpellsTweaker;
+import dev.codex.ironspelltweaker.IronSpellsTweakerConstants;
+import dev.codex.ironspelltweaker.platform.Services;
 import io.redspace.ironsspellbooks.api.config.IronConfigParameters;
 import io.redspace.ironsspellbooks.api.config.SpellConfigManager;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
@@ -17,7 +18,6 @@ import net.minecraft.Util;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.fml.loading.FMLPaths;
 
 import java.io.File;
 import java.io.FileReader;
@@ -40,7 +40,7 @@ public final class SpellConfigIO {
     private SpellConfigIO() {}
 
     public static File getBaseConfigDir() {
-        File dir = FMLPaths.CONFIGDIR.get().resolve("irons_spellbooks_spell_config").toFile();
+        File dir = Services.PLATFORM.getConfigDir().resolve("irons_spellbooks_spell_config").toFile();
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -172,7 +172,7 @@ public final class SpellConfigIO {
                     }
                 }
             } catch (Exception e) {
-                IronSpellsTweaker.LOGGER.error("Failed to read spell config for " + spellId, e);
+                IronSpellsTweakerConstants.LOGGER.error("Failed to read spell config for " + spellId, e);
             }
         }
 
@@ -214,12 +214,12 @@ public final class SpellConfigIO {
             try {
                 SpellRegistry.onConfigReload();
             } catch (Throwable t) {
-                IronSpellsTweaker.LOGGER.warn("Could not invoke SpellRegistry.onConfigReload(): " + t.getMessage());
+                IronSpellsTweakerConstants.LOGGER.warn("Could not invoke SpellRegistry.onConfigReload(): " + t.getMessage());
             }
 
             return true;
         } catch (Exception e) {
-            IronSpellsTweaker.LOGGER.error("Failed to save spell config for " + data.getSpellId(), e);
+            IronSpellsTweakerConstants.LOGGER.error("Failed to save spell config for " + data.getSpellId(), e);
             return false;
         }
     }
@@ -273,7 +273,7 @@ public final class SpellConfigIO {
                 }
             }
         } catch (Throwable t) {
-            IronSpellsTweaker.LOGGER.warn("Failed to clean empty config subdirectories: " + t.getMessage());
+            IronSpellsTweakerConstants.LOGGER.warn("Failed to clean empty config subdirectories: " + t.getMessage());
         }
 
         try {

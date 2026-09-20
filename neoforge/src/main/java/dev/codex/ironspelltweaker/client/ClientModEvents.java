@@ -1,6 +1,7 @@
 package dev.codex.ironspelltweaker.client;
 
 import dev.codex.ironspelltweaker.IronSpellsTweaker;
+import dev.codex.ironspelltweaker.IronSpellsTweakerConstants;
 import dev.codex.ironspelltweaker.client.gui.SpellTweakerScreen;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -19,7 +20,7 @@ public final class ClientModEvents {
     }
 
     private static void clientSetup(final FMLClientSetupEvent event) {
-        IronSpellsTweaker.LOGGER.info("Iron's Spell Tweaker GUI initialized on Client");
+        IronSpellsTweakerConstants.LOGGER.info("Iron's Spell Tweaker GUI initialized on Client");
 
         // Register main menu and pause screen button hooks
         NeoForge.EVENT_BUS.register(TitleScreenButtonHandler.class);
