@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+base {
+    archivesName = "${mod_name}-Forge-${minecraft_version}"
+}
+
+dependencies {
+    implementation project(':common')
+    compileOnly fileTree(dir: "${rootProject.projectDir}/libs_forge", include: ['*.jar'])
+}
+
+tasks.named('jar', Jar) {
+    from project(':common').sourceSets.main.output
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

@@ -2,12 +2,8 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         maven {
-            name = 'NeoForged'
-            url = 'https://maven.neoforged.net/releases'
-        }
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
         }
     }
 }
@@ -19,5 +15,4 @@ plugins {
 rootProject.name = 'IronSpellTweaker'
 
 include 'common'
-include 'neoforge'
-include 'fabric'
+include 'forge'

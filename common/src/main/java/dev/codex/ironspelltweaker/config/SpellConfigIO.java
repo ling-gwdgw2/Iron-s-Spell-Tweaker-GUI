@@ -166,7 +166,7 @@ public final class SpellConfigIO {
                 if (obj.has(KEY_ALLOW_CRAFTING)) crafting = obj.get(KEY_ALLOW_CRAFTING).getAsBoolean();
                 if (obj.has(KEY_SCHOOL)) {
                     String schStr = obj.get(KEY_SCHOOL).getAsString();
-                    SchoolType sch = SchoolRegistry.getSchool(ResourceLocation.parse(schStr));
+                    SchoolType sch = SchoolRegistry.getSchool(new ResourceLocation(schStr));
                     if (sch != null) {
                         activeSchool = sch;
                     }

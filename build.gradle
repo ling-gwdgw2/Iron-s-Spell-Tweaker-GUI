@@ -1,42 +1,25 @@
 plugins {
-    id 'net.neoforged.moddev' version '2.0.141' apply false
-    id 'fabric-loom' version "${loom_version}" apply false
+    id 'java'
 }
 
 subprojects {
-    apply plugin: 'java-library'
+    apply plugin: 'java'
     apply plugin: 'maven-publish'
 
     version = mod_version
     group = mod_group_id
 
-    java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
     repositories {
-        mavenLocal()
         mavenCentral()
         maven {
-            name = "NeoForged"
-            url = "https://maven.neoforged.net/releases"
-        }
-        maven {
-            name = "CurseMaven"
-            url = "https://cursemaven.com"
-            content {
-                includeGroup "curse.maven"
-            }
-        }
-        maven {
-            name = "Modrinth"
-            url = "https://api.modrinth.com/maven"
+            name = "MinecraftForge"
+            url = "https://maven.minecraftforge.net/"
         }
         maven {
             name = "Iron's Maven"
             url = "https://code.redspace.io/releases"
-        }
-        maven {
-            name = "TerraformersMC"
-            url = "https://maven.terraformersmc.com/releases/"
         }
     }
 

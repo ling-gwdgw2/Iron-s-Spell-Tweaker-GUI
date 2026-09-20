@@ -959,17 +959,17 @@ public class SpellTweakerScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         if (showConfirmModal) {
             return true;
         }
 
         if (mouseX >= 16 && mouseX <= 16 + leftWidth && mouseY >= listTop && mouseY <= listBottom) {
-            this.scrollOffset -= scrollY * 16;
+            this.scrollOffset -= delta * 16;
             return true;
         }
 
-        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
     @Override

@@ -1,12 +1,13 @@
-# 🪄 Iron's Spell Tweaker GUI
+# 🪄 Iron's Spell Tweaker GUI (Forge 1.20.1)
 
-[![Minecraft 1.21.1](https://img.shields.io/badge/Minecraft-1.21.1-brightgreen.svg)](https://minecraft.net/)
-[![NeoForge](https://img.shields.io/badge/ModLoader-NeoForge%2021.1.234+-orange.svg)](https://neoforged.net/)
-[![Fabric](https://img.shields.io/badge/ModLoader-Fabric%200.16+-blue.svg)](https://fabricmc.net/)
-[![Forge 1.20.1](https://img.shields.io/badge/Forge-1.20.1%20Branch-red.svg)](https://github.com/ling-gwdgw2/Iron-s-Spell-Tweaker-GUI/tree/1.20.1-forge)
-[![Java 21](https://img.shields.io/badge/Java-21-blue.svg)](https://adoptium.net/)
+[![Minecraft 1.20.1](https://img.shields.io/badge/Minecraft-1.20.1-brightgreen.svg)](https://minecraft.net/)
+[![Forge](https://img.shields.io/badge/ModLoader-Forge%2047.1.0+-orange.svg)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
+[![Java 17](https://img.shields.io/badge/Java-17-blue.svg)](https://adoptium.net/)
+[![Main Branch](https://img.shields.io/badge/1.21.1-NeoForge%20%26%20Fabric%20(main)-brightgreen.svg)](https://github.com/ling-gwdgw2/Iron-s-Spell-Tweaker-GUI/tree/main)
 
-An intuitive, modern in-game GUI mod for **Minecraft 1.21.1 (NeoForge & Fabric)** and **1.20.1 (Forge)** that allows players and modpack creators to freely tweak, balance, and customize all spells from [Iron's Spells 'n Spellbooks](https://www.curseforge.com/minecraft/mc-mods/irons-spells-n-spellbooks) and its addons—directly from the title screen or in-game pause menu with **zero restart required**!
+An intuitive, modern in-game GUI mod for **Minecraft Forge 1.20.1** that allows players and modpack creators to freely tweak, balance, and customize all spells from [Iron's Spells 'n Spellbooks](https://www.curseforge.com/minecraft/mc-mods/irons-spells-n-spellbooks) and its addons—directly from the title screen or in-game pause menu with **zero restart required**!
+
+> **Looking for 1.21.1 (NeoForge & Fabric)?** Check out the [`main`](https://github.com/ling-gwdgw2/Iron-s-Spell-Tweaker-GUI/tree/main) branch!
 
 ---
 
@@ -59,68 +60,60 @@ An intuitive, modern in-game GUI mod for **Minecraft 1.21.1 (NeoForge & Fabric)*
 ---
 
 ## 📦 Requirements & Dependencies
-
+ 
 | Dependency | Version | Required? |
 |---|---|---|
-| **Minecraft** | `1.21.1` | Required |
-| **NeoForge** | `21.1.234` or newer | Required |
-| **Iron's Spells 'n Spellbooks** | `1.21.1-3.4.0+` | Required |
-| **YetAnotherConfigLib (YACL)** | `3.8.0+` | Optional |
+| **Minecraft** | `1.20.1` | Required |
+| **Forge** | `47.1.0` or newer | Required |
+| **Iron's Spells 'n Spellbooks** | `1.20.1-3.0.0+` | Required |
 
 ---
 
 ## 🛠️ Installation
 
 1. Download the latest release `.jar` from the [Releases](https://github.com/ling-gwdgw2/Iron-s-Spell-Tweaker-GUI/releases) page.
-2. Ensure you have **NeoForge 1.21.1** and **Iron's Spells 'n Spellbooks** installed.
-3. Place the `.jar` file into your `.minecraft/mods` directory.
-4. Launch the game! A new **"Spell Tweaker"** button will appear on the title screen.
+2. Ensure you have **Forge 1.20.1** and **Iron's Spells 'n Spellbooks** installed.
+3. Place `Iron's Spell Tweaker GUI-Forge-1.20.1-1.0.0.jar` into your `.minecraft/mods` directory.
+4. Launch the game! A new **"Spell Tweaker"** button will appear on the title screen and pause menu.
 
 ---
 
 ## 💻 Building from Source
 
 ### Prerequisites
-- [JDK 21](https://adoptium.net/) or higher installed and set on your `JAVA_HOME` / `PATH`.
+- [JDK 17](https://adoptium.net/) or higher installed and set on your `JAVA_HOME` / `PATH`.
 - Git installed.
 
 ### Steps
 ```bash
-# 1. Clone the repository
-git clone https://github.com/ling-gwdgw2/Iron-s-Spell-Tweaker-GUI.git
+# 1. Clone the repository and switch to the Forge 1.20.1 branch
+git clone -b 1.20.1-forge https://github.com/ling-gwdgw2/Iron-s-Spell-Tweaker-GUI.git
 cd Iron-s-Spell-Tweaker-GUI
 
-# 2. Build for NeoForge 1.21.1
-.\gradlew.bat :neoforge:jar
+# 2. Build with Gradle
+.\gradlew.bat :forge:jar
 
-# 3. Build for Fabric 1.21.1
-.\gradlew.bat :fabric:remapJar
-
-# Or build all subprojects:
-.\gradlew.bat build
+# Or build with Python script:
+python build_forge.py
 ```
 
-Compiled mod JARs will be located in:
-- `neoforge/build/libs/Iron's Spell Tweaker GUI-NeoForge-1.21.1-1.0.0.jar`
-- `fabric/build/libs/Iron's Spell Tweaker GUI-Fabric-1.21.1-1.0.0.jar`
+The compiled mod JAR will be located in:
+`forge/build/libs/Iron's Spell Tweaker GUI-Forge-1.20.1-1.0.0.jar`
 
 ---
 
-## 🏗️ Multi-Loader Architecture
+## 🏗️ Architecture
 
-Following the modern architecture pattern of Iron's Spells 'n Spellbooks:
 ```
 Iron's Spell Tweaker GUI/
-├── common/                  # 95% of codebase (Vanilla Minecraft + Iron's Spells API)
-│   ├── src/main/java/       # UI Screens, Sliders, JSON I/O, Discovery Service
+├── common/                  # Shared UI Screens, Sliders, JSON I/O, Discovery Service
+│   ├── src/main/java/       # 1.20.1 compatible UI and configuration logic
 │   └── src/main/resources/  # Assets (lang/en_us.json, lang/th_th.json, icon.png)
-├── neoforge/                # NeoForge 1.21.1 adapter & entrypoints
-│   ├── src/main/java/       # @Mod, IConfigScreenFactory, NeoForgePlatformHelper
-│   └── src/main/resources/  # META-INF/neoforge.mods.toml, ServiceLoader SPI
-├── fabric/                  # Fabric 1.21.1 adapter & entrypoints
-│   ├── src/main/java/       # ClientModInitializer, ModMenuApi, FabricPlatformHelper
-│   └── src/main/resources/  # fabric.mod.json, ServiceLoader SPI
-└── settings.gradle          # Multi-project Gradle configuration
+├── forge/                   # Forge 1.20.1 adapter & entrypoints
+│   ├── src/main/java/       # @Mod, TitleScreenButtonHandler, ForgePlatformHelper
+│   └── src/main/resources/  # META-INF/mods.toml, ServiceLoader SPI
+├── libs_forge/              # Forge 1.20.1 & Iron's Spells 1.20.1 compile libraries
+└── build_forge.py           # Standalone automated build script
 ```
 
 ---

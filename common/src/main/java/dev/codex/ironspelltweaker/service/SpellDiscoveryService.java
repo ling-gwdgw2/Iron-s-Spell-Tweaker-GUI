@@ -25,16 +25,16 @@ public class SpellDiscoveryService {
         Set<String> modSet = new LinkedHashSet<>();
 
         // Ensure all registered schools from SchoolRegistry are included
-        if (SchoolRegistry.REGISTRY != null) {
-            for (SchoolType school : SchoolRegistry.REGISTRY) {
+        if (SchoolRegistry.REGISTRY != null && SchoolRegistry.REGISTRY.get() != null) {
+            for (SchoolType school : SchoolRegistry.REGISTRY.get().getValues()) {
                 if (school != null) {
                     schoolSet.add(school);
                 }
             }
         }
 
-        if (SpellRegistry.REGISTRY != null) {
-            for (Map.Entry<net.minecraft.resources.ResourceKey<AbstractSpell>, AbstractSpell> entry : SpellRegistry.REGISTRY.entrySet()) {
+        if (SpellRegistry.REGISTRY != null && SpellRegistry.REGISTRY.get() != null) {
+            for (Map.Entry<net.minecraft.resources.ResourceKey<AbstractSpell>, AbstractSpell> entry : SpellRegistry.REGISTRY.get().getEntries()) {
                 AbstractSpell spell = entry.getValue();
                 ResourceLocation id = entry.getKey().location();
 
