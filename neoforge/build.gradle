@@ -53,6 +53,7 @@ dependencies {
 
 tasks.named('jar', Jar) {
     from project(':common').sourceSets.main.output
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
