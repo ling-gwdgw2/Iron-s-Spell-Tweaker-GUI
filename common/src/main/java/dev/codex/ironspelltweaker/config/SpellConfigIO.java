@@ -166,7 +166,7 @@ public final class SpellConfigIO {
                 if (obj.has(KEY_ALLOW_CRAFTING)) crafting = obj.get(KEY_ALLOW_CRAFTING).getAsBoolean();
                 if (obj.has(KEY_SCHOOL)) {
                     String schStr = obj.get(KEY_SCHOOL).getAsString();
-                    SchoolType sch = SchoolRegistry.getSchool(new ResourceLocation(schStr));
+                    SchoolType sch = SchoolRegistry.getSchool(ResourceLocation.parse(schStr));
                     if (sch != null) {
                         activeSchool = sch;
                     }
@@ -209,6 +209,7 @@ public final class SpellConfigIO {
             }
 
             data.setHasCustomConfigFile(true);
+            data.setModified(false);
 
             // Reload Iron's Spells registry
             try {
@@ -232,6 +233,7 @@ public final class SpellConfigIO {
         }
         data.setHasCustomConfigFile(false);
         data.resetToDefaults();
+        data.setModified(false);
 
         try {
             SpellRegistry.onConfigReload();
@@ -251,6 +253,7 @@ public final class SpellConfigIO {
             }
             spell.setHasCustomConfigFile(false);
             spell.resetToDefaults();
+            spell.setModified(false);
         }
 
         // Also clean up any remaining JSON files and empty namespace subdirectories

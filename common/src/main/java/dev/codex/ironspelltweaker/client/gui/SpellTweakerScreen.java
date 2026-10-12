@@ -246,13 +246,13 @@ public class SpellTweakerScreen extends Screen {
 
         this.modalConfirmBtn = Button.builder(Component.translatable("iron_spell_tweaker.modal.confirm"), b -> executeModalConfirm())
                 .bounds(mX + (modalW / 2) - btnW - 6, btnY, btnW, 20).build();
-        this.modalConfirmBtn.visible = false;
-        this.modalConfirmBtn.active = false;
+        this.modalConfirmBtn.visible = showConfirmModal;
+        this.modalConfirmBtn.active = showConfirmModal;
 
         this.modalCancelBtn = Button.builder(Component.translatable("iron_spell_tweaker.modal.cancel"), b -> closeConfirmModal())
                 .bounds(mX + (modalW / 2) + 6, btnY, btnW, 20).build();
-        this.modalCancelBtn.visible = false;
-        this.modalCancelBtn.active = false;
+        this.modalCancelBtn.visible = showConfirmModal;
+        this.modalCancelBtn.active = showConfirmModal;
     }
 
     private void buildTweakPanel() {
@@ -715,10 +715,10 @@ public class SpellTweakerScreen extends Screen {
                 // Badges
                 if (!item.isEnabled()) {
                     guiGraphics.drawString(this.font, "[DISABLED]", 14 + leftWidth - 58, entryY + 12, 0xFF5555, false);
-                } else if (item.hasCustomConfigFile()) {
-                    guiGraphics.drawString(this.font, "[EDITED]", 14 + leftWidth - 48, entryY + 12, 0xFFAA00, false);
                 } else if (item.isModified()) {
                     guiGraphics.drawString(this.font, "[UNSAVED]", 14 + leftWidth - 54, entryY + 12, 0xFFFF55, false);
+                } else if (item.hasCustomConfigFile()) {
+                    guiGraphics.drawString(this.font, "[EDITED]", 14 + leftWidth - 48, entryY + 12, 0xFFAA00, false);
                 }
             }
         }
