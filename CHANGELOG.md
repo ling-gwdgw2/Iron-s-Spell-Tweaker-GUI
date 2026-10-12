@@ -7,7 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1] - 2026-10-12
+
+### Added
+- **Client Configuration (`iron_spell_tweaker-client.json`)**:
+  - `showTitleScreenButton` (default `true`): Option to hide the button from the Main Menu.
+  - `showPauseScreenButton` (default `true`): Option to hide the button from the In-Game Pause Menu.
+  - `buttonStyle` (default `"SQUARE"`): Switch between compact `"SQUARE"` (20x20) and classic `"RECTANGLE"` (98x20).
+  - `titleScreenXOffset` & `titleScreenYOffset`: Customizable pixel offset coordinates for Title Screen.
+  - `pauseScreenXOffset` & `pauseScreenYOffset`: Customizable pixel offset coordinates for Pause Menu.
+  - Automatic default config file generation on first run with live reload on menu open.
+
+### Changed
+- **Compact Square Menu Button**:
+  - Changed default button style to a sleek 20x20 pixel square button (`✦`) matching Quark's button aesthetic.
+  - Prevents button overlap with other mods' UI elements on the Main Menu and Pause Menu.
+  - Retains detailed multi-line hover tooltip (`Spell Tweaker: Configure Iron's Spells and all addon spells`).
+- **UI State & Badge Polishing**:
+  - Improved `[UNSAVED]` badge responsiveness when editing pre-existing configs.
+  - Auto-reposition and persist confirmation dialog buttons during window resize.
+
+---
+
 ## [1.0.0] - 2026-09-20
+
 
 ### Added
 - **Interactive Spell Browser**:

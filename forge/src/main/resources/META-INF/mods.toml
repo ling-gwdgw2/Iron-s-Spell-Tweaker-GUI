@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/ling-gwdgw2/Iron-s-Spell-Tweaker-GUI/issues"
 
 [[mods]]
 modId="iron_spell_tweaker"
-version="1.0.0"
+version="1.0.1"
 displayName="Iron's Spell Tweaker GUI"
 description='''An intuitive GUI to tweak Iron's Spells 'n Spellbooks stats, cooldowns, mana costs, and rarities directly before starting the game.'''
 authors="vivo9"

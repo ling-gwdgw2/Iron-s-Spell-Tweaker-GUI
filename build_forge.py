@@ -21,7 +21,7 @@ def build_forge():
 
     out_dir = os.path.join(base_dir, 'forge', 'build', 'libs')
     os.makedirs(out_dir, exist_ok=True)
-    out_jar = os.path.join(out_dir, "Iron's Spell Tweaker GUI-Forge-1.20.1-1.0.0.jar")
+    out_jar = os.path.join(out_dir, "Iron's Spell Tweaker GUI-Forge-1.20.1-1.0.1.jar")
 
     bin_dir = os.path.join(base_dir, 'forge', 'build', 'classes')
     if os.path.exists(bin_dir):
