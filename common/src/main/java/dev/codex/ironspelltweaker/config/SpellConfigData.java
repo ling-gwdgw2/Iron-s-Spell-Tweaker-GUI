@@ -235,6 +235,10 @@ public class SpellConfigData {
         return modified;
     }
 
+    public void setModified(boolean modified) {
+        this.modified = modified;
+    }
+
     public boolean hasCustomConfigFile() {
         return hasCustomConfigFile;
     }
